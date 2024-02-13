@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Start from "./views/Start.vue";
+import NewsFeed from "./views/NewsFeed.vue";
 
 const routes = [
     {
         path: "/",
         name: "home",
-        component: Start,
+        component: NewsFeed,
     },
 ];
 
