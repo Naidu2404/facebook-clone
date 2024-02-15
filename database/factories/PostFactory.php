@@ -19,6 +19,7 @@ class PostFactory extends Factory
         return [
             'user_id' => \App\Models\User::factory(),
             'body' => fake()->sentence,
+            'image' => 'image.jpg',
         ];
     }
 }
