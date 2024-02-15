@@ -54,8 +54,9 @@
                 </svg>
             </router-link>
             <router-link
+                v-if="!authUser.userStatus"
                 class="px-6 h-full border-b-2 border-white flex items-center"
-                to="/"
+                :to="'/users/' + authUser.user.data.user_id"
             >
                 <img
                     src="https://storage.needpix.com/rsynced_images/man-388104_1280.jpg"
@@ -93,8 +94,15 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
     name: "Nav",
+
+    computed: {
+        ...mapGetters({
+            authUser: "authUser",
+        }),
+    },
 };
 </script>
 

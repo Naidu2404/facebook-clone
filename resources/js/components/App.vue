@@ -22,6 +22,20 @@ export default {
         Nav,
         SideBar,
     },
+
+    created() {
+        this.$store.dispatch("setPageTitle", this.$route.meta.title);
+    },
+
+    mounted() {
+        this.$store.dispatch("fetchAuthUser");
+    },
+
+    watch: {
+        $route(to, from) {
+            this.$store.dispatch("setPageTitle", to.meta.title);
+        },
+    },
 };
 </script>
 
