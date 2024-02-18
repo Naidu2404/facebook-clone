@@ -10,5 +10,7 @@ Route::middleware('auth:api')
         Route::apiResource('/posts', App\Http\Controllers\PostController::class);
         Route::apiResource('/users', App\Http\Controllers\UserController::class);
         Route::apiResource('/users/{user}/posts', App\Http\Controllers\UserPostController::class);
+        Route::apiResource('/friend-request', App\Http\Controllers\FriendRequestController::class);
+        Route::apiResource('/friend-request-response', App\Http\Controllers\FriendRequestResponseController::class);
 
     });

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col items-center" v-if="!userLoading">
+    <div class="flex flex-col items-center" v-if="user">
         <div class="relative mb-8">
             <div class="w-100 h-64 overflow-hidden z-10">
                 <img
@@ -24,6 +24,47 @@
                     {{ user.data.attributes.name }}
                 </p>
             </div>
+
+            <div
+                class="absolute flex items-center bottom-0 right-0 mb-4 mr-12 z-20"
+            >
+                <button
+                    v-if="friendButtonText && friendButtonText !== 'Accept'"
+                    class="py-1 px-3 bg-gray-400 rounded"
+                    @click="
+                        $store.dispatch(
+                            'sendFriendRequest',
+                            $route.params.userId
+                        )
+                    "
+                >
+                    {{ friendButtonText }}
+                </button>
+                <button
+                    v-if="friendButtonText && friendButtonText === 'Accept'"
+                    class="mr-2 py-1 px-3 bg-blue-500 rounded"
+                    @click="
+                        $store.dispatch(
+                            'acceptFriendRequest',
+                            $route.params.userId
+                        )
+                    "
+                >
+                    Accept
+                </button>
+                <button
+                    v-if="friendButtonText && friendButtonText === 'Accept'"
+                    class="py-1 px-3 bg-gray-400 rounded"
+                    @click="
+                        $store.dispatch(
+                            'ignoreFriendRequest',
+                            $route.params.userId
+                        )
+                    "
+                >
+                    Ignore
+                </button>
+            </div>
         </div>
 
         <p v-if="postLoading">Loading posts...</p>
@@ -42,6 +83,7 @@
 
 <script>
 import Post from "../../components/Post.vue";
+import { mapGetters } from "vuex";
 export default {
     name: "Show",
     components: {
@@ -49,23 +91,12 @@ export default {
     },
     data() {
         return {
-            user: null,
             posts: null,
-            userLoading: true,
             postLoading: true,
         };
     },
     mounted() {
-        axios
-            .get("/api/users/" + this.$route.params.userId)
-            .then((res) => {
-                this.user = res.data;
-                this.userLoading = false;
-            })
-            .catch((error) => {
-                console.log("Unable to fetch user from the server");
-                this.userLoading = false;
-            });
+        this.$store.dispatch("fetchUser", this.$route.params.userId);
 
         axios
             .get("/api/users/" + this.$route.params.userId + "/posts")
@@ -77,6 +108,13 @@ export default {
                 console.log("unable to fetch posts");
                 this.postLoading = false;
             });
+    },
+
+    computed: {
+        ...mapGetters({
+            user: "user",
+            friendButtonText: "friendButtonText",
+        }),
     },
 };
 </script>
