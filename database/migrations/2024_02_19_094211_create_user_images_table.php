@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('path');
-            $table->string('width');
-            $table->string('height');
-            $table->string('location');
+            $table->string('width')->nullable();
+            $table->string('height')->nullable();
+            $table->string('location')->nullable();
             $table->timestamps();
         });
     }
