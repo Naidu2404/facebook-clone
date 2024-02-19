@@ -17,8 +17,6 @@ class PostToTimelineTest extends TestCase
     #[Test]
     public function a_user_can_post_a_text_post()
     {
-        //we avoid exception handling to get detailed error
-        $this->withoutExceptionHandling();
 
         //we need the user and authentication
         //so we create one
@@ -26,12 +24,8 @@ class PostToTimelineTest extends TestCase
 
         //we get a response for our post from the backend
         $response = $this->post('/api/posts', [
-            'data' => [
-                'type' => 'posts',
-                'attributes' => [
-                    'body' => 'Testing Body',
-                ],
-            ],
+
+            'body' => 'Testing Body',
         ]);
 
         $post = Post::first();

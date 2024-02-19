@@ -16,11 +16,12 @@
                         />
                     </svg>
                 </router-link>
+
                 <div class="ml-2 relative">
                     <div class="absolute text-gray-700">
                         <svg
                             viewBox="0 0 24 24"
-                            class="w-5 fill-current h-5 mt-2 ml-2"
+                            class="fill-current w-5 h-5 mt-2 ml-2"
                         >
                             <path
                                 fill-rule="evenodd"
@@ -32,7 +33,7 @@
                     <input
                         type="text"
                         name="search"
-                        class="w-56 h-8 bg-gray-200 rounded-full focus:outline-none focus:ring-1 focus:border-blue-300 pl-8 text-sm"
+                        class="rounded-full pl-8 w-56 bg-gray-200 h-8 focus:outline-none focus:shadow-outline text-sm"
                         placeholder="Search Facebook"
                     />
                 </div>
@@ -40,8 +41,8 @@
         </div>
         <div class="w-1/3 flex justify-center items-center h-full">
             <router-link
-                class="px-6 h-full border-b-2 border-blue-500 flex items-center"
                 to="/"
+                class="px-6 border-b-2 border-blue-500 h-full flex items-center"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -54,19 +55,18 @@
                 </svg>
             </router-link>
             <router-link
-                v-if="!authUser.userStatus"
-                class="px-6 h-full border-b-2 border-white flex items-center"
-                :to="'/users/' + authUser.user.data.user_id"
+                :to="'/users/' + authUser.data.user_id"
+                class="px-6 border-b-2 border-white h-full flex items-center"
             >
                 <img
-                    src="https://storage.needpix.com/rsynced_images/man-388104_1280.jpg"
+                    src="https://cdn.pixabay.com/photo/2014/07/09/10/04/man-388104_960_720.jpg"
                     alt="profile image for user"
                     class="w-8 h-8 object-cover rounded-full"
                 />
             </router-link>
             <router-link
-                class="px-6 h-full border-b-2 border-white flex items-center"
                 to="/"
+                class="px-6 border-b-2 border-white h-full flex items-center"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -95,6 +95,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
     name: "Nav",
 
@@ -105,5 +106,3 @@ export default {
     },
 };
 </script>
-
-<style scoped></style>

@@ -1,39 +1,36 @@
 const state = {
-    userData: {
-        user: null,
-        userStatus: true,
-    },
+    user: null,
+    userStatus: null,
 };
 
 const getters = {
     authUser: (state) => {
-        return state.userData;
+        return state.user;
     },
 };
 
 const actions = {
-    fetchAuthUser({ commit, state }) {
-        axios
+    async fetchAuthUser({ commit, state }) {
+        await axios
             .get("/api/auth-user")
             .then((res) => {
                 commit("setAuthUser", res.data);
             })
             .catch((error) => {
-                console.log("unable to fetch auth user");
+                console.log("Unable to fetch auth user");
             });
     },
 };
 
 const mutations = {
     setAuthUser(state, user) {
-        state.userData.user = user;
-        state.userData.userStatus = false;
+        state.user = user;
     },
 };
 
 export default {
     state,
-    actions,
     getters,
+    actions,
     mutations,
 };

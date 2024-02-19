@@ -1,21 +1,27 @@
 const state = {
     user: null,
-    userStatus: true,
+    userStatus: null,
 };
 
 const getters = {
     user: (state) => {
         return state.user;
     },
+    status: (state) => {
+        return {
+            user: state.userStatus,
+            posts: state.postsStatus,
+        };
+    },
     friendship: (state) => {
         return state.user.data.attributes.friendship;
     },
     friendButtonText: (state, getters, rootState) => {
-        // if (rootState.User.user) {
-        if (getters.friendship === null) {
+        if (rootState.User.user.data.user_id === state.user.data.user_id) {
+            return "";
+        } else if (getters.friendship === null) {
             return "Add Friend";
         } else if (
-            rootState.User.user &&
             getters.friendship.data.attributes.confirmed_at === null &&
             getters.friendship.data.attributes.friend_id !==
                 rootState.User.user.data.user_id
@@ -24,14 +30,16 @@ const getters = {
         } else if (getters.friendship.data.attributes.confirmed_at !== null) {
             return "";
         }
-        // }
+
         return "Accept";
     },
 };
 
 const actions = {
-    fetchUser({ commit, dispatch }, userId) {
-        axios
+    async fetchUser({ commit, dispatch }, userId) {
+        commit("setUserStatus", "loading");
+
+        await axios
             .get("/api/users/" + userId)
             .then((res) => {
                 commit("setUser", res.data);
@@ -41,16 +49,22 @@ const actions = {
                 commit("setUserStatus", "error");
             });
     },
-    sendFriendRequest({ commit, state }, friendId) {
-        axios
+    async sendFriendRequest({ commit, getters }, friendId) {
+        if (getters.friendButtonText !== "Add Friend") {
+            return;
+        }
+
+        await axios
             .post("/api/friend-request", { friend_id: friendId })
             .then((res) => {
                 commit("setUserFriendship", res.data);
             })
-            .catch((error) => {});
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
     },
-    acceptFriendRequest({ commit, state }, userId) {
-        axios
+    async acceptFriendRequest({ commit, state }, userId) {
+        await axios
             .post("/api/friend-request-response", {
                 user_id: userId,
                 status: 1,
@@ -58,17 +72,21 @@ const actions = {
             .then((res) => {
                 commit("setUserFriendship", res.data);
             })
-            .catch((error) => {});
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
     },
-    ignoreFriendRequest({ commit, state }, userId) {
-        axios
+    async ignoreFriendRequest({ commit, state }, userId) {
+        await axios
             .delete("/api/friend-request-response/delete", {
                 data: { user_id: userId },
             })
             .then((res) => {
                 commit("setUserFriendship", null);
             })
-            .catch((error) => {});
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
     },
 };
 
@@ -86,7 +104,7 @@ const mutations = {
 
 export default {
     state,
-    actions,
     getters,
+    actions,
     mutations,
 };
